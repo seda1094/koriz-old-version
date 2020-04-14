@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Text, Form } from 'react-native';
+import {StyleSheet, View, Image, ImageBackground } from 'react-native';
 
 import UIButton from '../../../../components/UI/UIButton';
 import UIInput from '../../../../components/UI/UIInput';
@@ -43,7 +43,7 @@ class SignIn extends Component {
     onChangeTextHandler = (event, controlName) => {
         const formControls = { ...this.state.formControls }
         const control = { ...formControls[controlName] }
-        control.value = event.target.value
+        control.value = event
         control.touched = true
         control.valid = validate(control.value, control.validation)
 
@@ -78,14 +78,19 @@ class SignIn extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.top}></View>
+                <ImageBackground resizeMode='contain' style={styles.top} source={require('../../../../../assets/images/auth/signIn/banner.png')}>
+                </ImageBackground>
                 <View style={styles.middle}>
                 {this.renderInputs()}
                 <UIButton 
                 disabled={!this.state.isFormValid} 
                 onPress={this.loginHandler}>Sign In</UIButton>
                 </View>
-                <View style={styles.bottom}></View>
+                <ImageBackground 
+                resizeMode='cover' 
+                style={styles.bottom} 
+                source={require('../../../../../assets/images/auth/signIn/12.png')}>
+                </ImageBackground>
             </View>
         );
     }
@@ -94,20 +99,22 @@ class SignIn extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'white'
     },
     top:{
         flex: 2,
-        backgroundColor: 'red'
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    banner:{
+        height: 'auto',
+        width: '100%'
     },
     middle:{
         flex: 3,
-        backgroundColor: 'green'
-
     },
     bottom:{
-        flex: 1,
-        backgroundColor: 'blue'
-
+        flex: 1.5,
     },
 })
 
