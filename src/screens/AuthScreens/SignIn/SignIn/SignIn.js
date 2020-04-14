@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, Form } from 'react-native';
-
-import is from 'is_js'
+import {StyleSheet, View, Text, Form } from 'react-native';
 
 import UIButton from '../../../../components/UI/UIButton';
 import UIInput from '../../../../components/UI/UIInput';
+
+import { createControl, validate, validateForm } from '../../../../form/formFramework';
 
 
 class SignIn extends Component {
@@ -12,55 +12,29 @@ class SignIn extends Component {
     state = {
         isFormValid: false,
         formControls: {
-            email: {
-                value: '',
+            email: createControl({
                 type: 'email',
                 label: 'Email',
-                secureTextEntry: false,
                 errorMessage: 'Chisht Mail Greq',
-                valid: false,
-                touched: false,
-                validation: {
-                    required: true,
-                    email: true
-                }
-            },
-            password: {
-                value: '',
+                secureTextEntry: false
+            }, {
+                required: true,
+                email: true
+            }),
+
+            password: createControl({
                 type: 'password',
                 label: 'Password',
-                secureTextEntry: true,
                 errorMessage: 'Chisht password eq Grel',
-                valid: false,
-                touched: false,
-                validation: {
-                    required: true,
-                    minLength: 6
-                }
-            }
+                secureTextEntry: true
+            }, {
+                required: true,
+                minLength: 6,
+                password: true
+            })  
         }
     }
 
-    validateControl(value, validation){
-        if (!validation) {
-            return true
-        }
-        let isValid = true
-
-        if (validation.required) {
-            isValid = value.trim() !== '' && isValid
-        }
-
-        if (validation.email) {
-            isValid = is.email(value) && isValid
-        }
-
-        if (validation.minLength) {
-            isValid = value.length >= validation.minLength && isValid
-        }
-
-        return isValid
-    }
 
     loginHandler = () => {
         console.log('login');
@@ -71,18 +45,13 @@ class SignIn extends Component {
         const control = { ...formControls[controlName] }
         control.value = event.target.value
         control.touched = true
-        control.valid = this.validateControl(control.value, control.validation)
+        control.valid = validate(control.value, control.validation)
 
         formControls[controlName] = control
 
-        let isFormValid = true
-
-        Object.keys(formControls).forEach(name => {
-            isFormValid = formControls[name].valid && isFormValid
-        })
-
         this.setState({
-            formControls, isFormValid
+            formControls, 
+            isFormValid : validateForm(formControls)
         })
     }
 
@@ -106,17 +75,43 @@ class SignIn extends Component {
         })
     }
 
-
     render() {
         return (
-            <View>
+            <View style={styles.container}>
+                <View style={styles.top}></View>
+                <View style={styles.middle}>
                 {this.renderInputs()}
-                <UIButton disabled={!this.state.isFormValid} onPress={this.loginHandler}>Sign In</UIButton>
+                <UIButton 
+                disabled={!this.state.isFormValid} 
+                onPress={this.loginHandler}>Sign In</UIButton>
+                </View>
+                <View style={styles.bottom}></View>
             </View>
         );
-
-
     }
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    top:{
+        flex: 2,
+        backgroundColor: 'red'
+    },
+    middle:{
+        flex: 3,
+        backgroundColor: 'green'
+
+    },
+    bottom:{
+        flex: 1,
+        backgroundColor: 'blue'
+
+    },
+})
+
 export default SignIn;
+
+
+
