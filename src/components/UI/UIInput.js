@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Button, View, TextInput, Text } from 'react-native';
+import { THEME } from '../../theme';
 
 
 const isInvalid = ({ valid, touched, shouldValidate }) => {
@@ -35,13 +36,15 @@ const styles = StyleSheet.create({
     },
     input:{
         height: 38,
-        backgroundColor: '#f8f8eb',
+        backgroundColor: THEME.inputColor,
         borderRadius: 18,
         paddingHorizontal: 10
     },
     errorMessage:{
         fontSize: 12,
-        color: 'red'
+        color: THEME.errorColor,
+        position: 'relative',
+        zIndex: 999
     }
 })
 

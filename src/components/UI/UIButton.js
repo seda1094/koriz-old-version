@@ -1,18 +1,19 @@
 import React from 'react';
 import {StyleSheet, Button, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { THEME } from '../../theme';
 
 
 const UIButton = (props) => {
     console.log(props.children);
     const buttonStyle = {...styles.button}
     props.disabled
-        ? buttonStyle.backgroundColor = '#c3e096'
-        : buttonStyle.backgroundColor = '#86c12d'
+        ? buttonStyle.backgroundColor = THEME.disabledButtonColor
+        : buttonStyle.backgroundColor = THEME.green
     
     return (
         <View style={styles.buttonWrapper}>
-            <TouchableOpacity style={buttonStyle} onPress={props.onPress}
+            <TouchableOpacity style={{...buttonStyle}} onPress={props.onPress}
                 disabled={props.disabled}>
                     <Text style={styles.buttonTitle}>{props.children}</Text>
                     </TouchableOpacity>
@@ -28,7 +29,6 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 38,
-        backgroundColor: '#86c12d',
         borderRadius: 18,
         paddingHorizontal: 10,
         justifyContent: 'center',

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Image, ImageBackground } from 'react-native';
+import { StyleSheet, View, Image, ImageBackground, Text } from 'react-native';
 
 import UIButton from '../../../../components/UI/UIButton';
 import UIInput from '../../../../components/UI/UIInput';
 
 import { createControl, validate, validateForm } from '../../../../form/formFramework';
+import { THEME } from '../../../../theme';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 class SignIn extends Component {
@@ -14,8 +16,8 @@ class SignIn extends Component {
         formControls: {
             email: createControl({
                 type: 'email',
-                label: 'Email',
-                errorMessage: 'Chisht Mail Greq',
+                label: 'Էլ. Հասցե',
+                errorMessage: 'Հասցեն սխալ է',
                 secureTextEntry: false
             }, {
                 required: true,
@@ -24,14 +26,14 @@ class SignIn extends Component {
 
             password: createControl({
                 type: 'password',
-                label: 'Password',
-                errorMessage: 'Chisht password eq Grel',
+                label: 'Գաղտնաբառ',
+                errorMessage: 'Գաղտնաբառը սխալ է',
                 secureTextEntry: true
             }, {
                 required: true,
                 minLength: 6,
                 password: true
-            })  
+            })
         }
     }
 
@@ -50,12 +52,12 @@ class SignIn extends Component {
         formControls[controlName] = control
 
         this.setState({
-            formControls, 
-            isFormValid : validateForm(formControls)
+            formControls,
+            isFormValid: validateForm(formControls)
         })
     }
 
-    renderInputs() {
+    renderInputs = () => {
         return Object.keys(this.state.formControls).map((controlName, index) => {
             const control = this.state.formControls[controlName]
             return (
@@ -78,18 +80,31 @@ class SignIn extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <ImageBackground resizeMode='contain' style={styles.top} source={require('../../../../../assets/images/auth/signIn/banner.png')}>
+                <ImageBackground resizeMode='contain' style={styles.banner} source={require('../../../../../assets/images/auth/signIn/banner.png')}>
                 </ImageBackground>
                 <View style={styles.middle}>
-                {this.renderInputs()}
-                <UIButton 
-                disabled={!this.state.isFormValid} 
-                onPress={this.loginHandler}>Sign In</UIButton>
+                    <View style={styles.form}>
+                        {this.renderInputs()}
+                        <UIButton
+                            disabled={!this.state.isFormValid}
+                            onPress={this.loginHandler}>ՄՈՒՏՔ</UIButton>
+                    </View>
+                    <View style={styles.info}>
+                        <View style={styles.inlineWrapper}>
+                            <Text style={styles.text}>ԴԵՌ ԳՐԱՆՑՎԱԾ ՉԵ ՞Ք</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUpRoute')}>
+                                <Text style={styles.link}> • ԳՐԱՆՑՈՒՄ</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
+                            <Text style={styles.link}>ԳԱՂՏՆԱԲԱՌԻ ՀԻՇԵՑՈՒՄ</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <ImageBackground 
-                resizeMode='cover' 
-                style={styles.bottom} 
-                source={require('../../../../../assets/images/auth/signIn/12.png')}>
+                <ImageBackground
+                    resizeMode='cover'
+                    style={styles.bottom}
+                    source={require('../../../../../assets/images/auth/signIn/footer.png')}>
                 </ImageBackground>
             </View>
         );
@@ -99,21 +114,43 @@ class SignIn extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
-    top:{
+    banner: {
         flex: 2,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    banner:{
-        height: 'auto',
-        width: '100%'
-    },
-    middle:{
+
+    middle: {
         flex: 3,
+        position: 'relative',
+        zIndex: 999
     },
-    bottom:{
+    form: {
+        // flex: 4,
+        // backgroundColor: '#fff',
+        position: 'relative',
+        zIndex: 999
+    },
+    info: {
+        // flex: 1,
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 900
+    },
+    inlineWrapper: {
+        flexDirection: 'row'
+    },
+    text: {
+        color: THEME.grey,
+        fontWeight: 'bold'
+    },
+    link: {
+        color: THEME.green,
+        fontWeight: 'bold'
+    },
+    bottom: {
         flex: 1.5,
     },
 })
